@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Drift Http Kernel
+ * This file is part of the Drift Project
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,8 +15,8 @@ declare(strict_types=1);
 
 namespace Drift\AMQP;
 
-use Drift\AMQP\DependencyInjection\CompilerPass\AMQPCompilerPass;
 use Drift\AMQP\DependencyInjection\AMQPExtension;
+use Drift\AMQP\DependencyInjection\CompilerPass\AMQPCompilerPass;
 use Mmoreram\BaseBundle\BaseBundle;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;

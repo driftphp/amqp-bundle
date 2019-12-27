@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Drift Http Kernel
+ * This file is part of the Drift Project
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -44,18 +44,17 @@ class AMQPCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * Register client
+     * Register client.
      *
      * @param ContainerBuilder $container
-     * @param string $clientName
-     * @param array $clientConfiguration
+     * @param string           $clientName
+     * @param array            $clientConfiguration
      */
     private function registerClient(
         ContainerBuilder $container,
         string $clientName,
         array $clientConfiguration
-    )
-    {
+    ) {
         $clientId = "amqp.{$clientName}_client";
         $clientConfigurationHash = substr(md5(json_encode($clientConfiguration)), 0, 7);
         $clientConfigurationHash = "amqp.client.{$clientConfigurationHash}";
@@ -64,12 +63,12 @@ class AMQPCompilerPass implements CompilerPassInterface
                 Client::class,
                 [
                     new Reference('reactphp.event_loop'),
-                    $clientConfiguration
+                    $clientConfiguration,
                 ]
             );
 
             $definition->setMethodCalls([
-                ['connect', []]
+                ['connect', []],
             ]);
 
             $container->setDefinition(

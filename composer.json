@@ -13,6 +13,7 @@
 
   "require": {
     "php": "^7.3",
+    "symfony/dependency-injection": "^5.0",
     "bunny/bunny": "^0.4.1",
     "drift/http-kernel": "0.1.*",
     "mmoreram/base-bundle": "^2.1"
