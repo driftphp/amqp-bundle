@@ -1,0 +1,5 @@
+services:
+
+    amqp.users_client.test:
+        alias: amqp.users_client
+        public: true
