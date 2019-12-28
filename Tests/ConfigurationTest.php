@@ -63,9 +63,9 @@ class ConfigurationTest extends BaseFunctionalTest
                 'clients' => [
                     'users' => [
                         'host' => '127.0.0.1',
-                        'vhost' => 'lol',
-                        'user' => 'user',
-                        'password' => '1234',
+                        'vhost' => '/',
+                        'user' => 'guest',
+                        'password' => 'guest',
                     ],
                 ],
             ],

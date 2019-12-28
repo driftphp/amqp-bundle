@@ -16,6 +16,7 @@ declare(strict_types=1);
 namespace Drift\AMQP\Tests\Services;
 
 use Bunny\Async\Client;
+use Bunny\Channel;
 
 /**
  * Class AService.
@@ -38,20 +39,44 @@ class AService
     private $client3;
 
     /**
+     * @var Channel
+     */
+    private $channel1;
+
+    /**
+     * @var Channel
+     */
+    private $channel2;
+
+    /**
+     * @var Channel
+     */
+    private $channel3;
+
+    /**
      * AService constructor.
      *
-     * @param Client $usersClient
-     * @param Client $ordersClient
-     * @param Client $users2Client
+     * @param Client  $usersClient
+     * @param Client  $ordersClient
+     * @param Client  $users2Client
+     * @param Channel $usersChannel
+     * @param Channel $ordersChannel
+     * @param Channel $users2Channel
      */
     public function __construct(
         Client $usersClient,
         Client $ordersClient,
-        Client $users2Client
+        Client $users2Client,
+        Channel $usersChannel,
+        Channel $ordersChannel,
+        Channel $users2Channel
     ) {
         $this->client1 = $usersClient;
         $this->client2 = $ordersClient;
         $this->client3 = $users2Client;
+        $this->channel1 = $usersChannel;
+        $this->channel2 = $ordersChannel;
+        $this->channel3 = $users2Channel;
     }
 
     /**
@@ -60,6 +85,8 @@ class AService
     public function areOK()
     {
         return $this->client1 !== $this->client2
-            && $this->client1 === $this->client3;
+            && $this->client1 === $this->client3
+            && $this->channel1 !== $this->channel2
+            && $this->channel1 === $this->channel3;
     }
 }

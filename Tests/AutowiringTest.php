@@ -61,23 +61,17 @@ class AutowiringTest extends BaseFunctionalTest
             'amqp' => [
                 'clients' => [
                     'users' => [
-                        'host' => '127.0.0.1',
-                        'vhost' => 'orders',
-                        'user' => 'mmoreram',
-                        'password' => 'secret',
+                        'host' => 'localhost',
                     ],
                     'orders' => [
-                        'host' => '127.0.0.2',
-                        'vhost' => 'orders',
-                        'user' => 'mmoreram',
-                        'password' => 'secret',
+                        'host' => '127.0.0.1',
                     ],
                     'users2' => [
-                        'host' => '127.0.0.1',
+                        'host' => 'localhost',
                         'port' => 5672,
-                        'vhost' => 'orders',
-                        'user' => 'mmoreram',
-                        'password' => 'secret',
+                        'vhost' => '/',
+                        'user' => 'guest',
+                        'password' => 'guest',
                     ],
                 ],
             ],

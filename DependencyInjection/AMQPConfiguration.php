@@ -52,6 +52,10 @@ class AMQPConfiguration extends BaseConfiguration
                             ->scalarNode('password')
                                 ->defaultValue('guest')
                             ->end()
+
+                            ->scalarNode('preload')
+                                ->defaultTrue()
+                            ->end()
                         ->end()
                     ->end()
                 ->end()
