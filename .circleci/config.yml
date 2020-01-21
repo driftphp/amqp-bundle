@@ -29,6 +29,7 @@ jobs:
   test-php74:
     docker:
       - image: circleci/php:7.4-cli
+      - image: rabbitmq
 
     working_directory: ~/project
     steps:
