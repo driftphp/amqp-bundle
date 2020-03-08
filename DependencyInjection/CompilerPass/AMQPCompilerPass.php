@@ -39,7 +39,6 @@ class AMQPCompilerPass implements CompilerPassInterface
         }
 
         foreach ($clientsConfiguration as $clientName => $clientConfiguration) {
-            ksort($clientConfiguration);
             $this->registerClient($container, $clientName, $clientConfiguration);
         }
     }
@@ -51,66 +50,29 @@ class AMQPCompilerPass implements CompilerPassInterface
      * @param string           $clientName
      * @param array            $clientConfiguration
      */
-    private function registerClient(
+    protected function registerClient(
         ContainerBuilder $container,
         string $clientName,
         array $clientConfiguration
     ) {
-        $clientHash = substr(md5(json_encode($clientConfiguration)), 0, 7);
-        $clientHashId = "amqp.client.{$clientHash}";
-        $channelHashId = "amqp.channel.{$clientHash}";
-        $clientId = "amqp.{$clientName}_client";
-        $channelId = "amqp.{$clientName}_channel";
-
-        if (!$container->has($clientHashId)) {
-            $this->createConnectableClient($container, $clientHash, $clientConfiguration);
-            $this->createClient($container, $clientHash);
-            $this->createChannel($container, $clientHash, \boolval($clientConfiguration['preload']));
-        }
-
-        $container->setAlias(
-            $clientId,
-            $clientHashId
-        );
-
-        $container->setAlias(
-            Client::class,
-            $clientHashId
-        );
-
-        $container->setAlias(
-            AbstractClient::class,
-            $clientHashId
-        );
-
-        $container->setAlias(
-            $channelId,
-            $channelHashId
-        );
-
-        $container->setAlias(
-            Channel::class,
-            $channelHashId
-        );
-
-        $container->registerAliasForArgument($clientHashId, Client::class, "{$clientName} client");
-        $container->registerAliasForArgument($clientHashId, AbstractClient::class, "{$clientName} client");
-        $container->registerAliasForArgument($channelHashId, Channel::class, "{$clientName} channel");
+        $this->createConnectableClient($container, $clientName, $clientConfiguration);
+        $this->createClient($container, $clientName);
+        $this->createChannel($container, $clientName, \boolval($clientConfiguration['preload']));
     }
 
     /**
      * Create connectable client.
      *
      * @param ContainerBuilder $container
-     * @param string           $clientHash
+     * @param string           $clientName
      * @param array            $clientConfiguration
      */
     private function createConnectableClient(
         ContainerBuilder $container,
-        string $clientHash,
+        string $clientName,
         array $clientConfiguration
     ) {
-        $connectableClientId = "amqp.connectable_client.{$clientHash}";
+        $connectableClientId = "amqp.{$clientName}_connectable_client";
         $clientDefinition = new Definition(
             Client::class,
             [
@@ -129,14 +91,14 @@ class AMQPCompilerPass implements CompilerPassInterface
      * Create connectable client.
      *
      * @param ContainerBuilder $container
-     * @param string           $clientHash
+     * @param string           $clientName
      */
     private function createClient(
         ContainerBuilder $container,
-        string $clientHash
+        string $clientName
     ) {
-        $connectableClientId = "amqp.connectable_client.{$clientHash}";
-        $clientId = "amqp.client.{$clientHash}";
+        $connectableClientId = "amqp.{$clientName}_connectable_client";
+        $clientId = "amqp.{$clientName}_client";
         $clientDefinition = new Definition(Client::class);
         $clientDefinition->setPrivate(true);
         $clientDefinition->addTag('await');
@@ -149,22 +111,27 @@ class AMQPCompilerPass implements CompilerPassInterface
             $clientId,
             $clientDefinition
         );
+
+        $container->setAlias(Client::class, $clientId);
+        $container->setAlias(AbstractClient::class, $clientId);
+        $container->registerAliasForArgument($clientId, Client::class, "{$clientName} client");
+        $container->registerAliasForArgument($clientId, AbstractClient::class, "{$clientName} client");
     }
 
     /**
      * Create channel.
      *
      * @param ContainerBuilder $container
-     * @param string           $clientHash
+     * @param string           $clientName
      * @param bool             $preload
      */
     private function createChannel(
         ContainerBuilder $container,
-        string $clientHash,
+        string $clientName,
         bool $preload
     ) {
-        $channelId = "amqp.channel.{$clientHash}";
-        $clientId = "amqp.client.{$clientHash}";
+        $channelId = "amqp.{$clientName}_channel";
+        $clientId = "amqp.{$clientName}_client";
         $channelDefinition = new Definition(Channel::class);
 
         $channelDefinition->addTag('await');
@@ -182,5 +149,8 @@ class AMQPCompilerPass implements CompilerPassInterface
             $channelId,
             $channelDefinition
         );
+
+        $container->setAlias(Channel::class, $channelId);
+        $container->registerAliasForArgument($channelId, Channel::class, "{$clientName} channel");
     }
 }
