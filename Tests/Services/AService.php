@@ -85,8 +85,8 @@ class AService
     public function areOK()
     {
         return $this->client1 !== $this->client2
-            && $this->client1 === $this->client3
+            && $this->client1 !== $this->client3
             && $this->channel1 !== $this->channel2
-            && $this->channel1 === $this->channel3;
+            && $this->channel1 !== $this->channel3;
     }
 }
