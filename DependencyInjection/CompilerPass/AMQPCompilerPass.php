@@ -39,7 +39,7 @@ class AMQPCompilerPass implements CompilerPassInterface
         }
 
         foreach ($clientsConfiguration as $clientName => $clientConfiguration) {
-            $this->registerClient($container, $clientName, $clientConfiguration);
+            static::registerClient($container, $clientName, $clientConfiguration);
         }
     }
 
@@ -50,14 +50,14 @@ class AMQPCompilerPass implements CompilerPassInterface
      * @param string           $clientName
      * @param array            $clientConfiguration
      */
-    protected function registerClient(
+    public static function registerClient(
         ContainerBuilder $container,
         string $clientName,
         array $clientConfiguration
     ) {
-        $this->createConnectableClient($container, $clientName, $clientConfiguration);
-        $this->createClient($container, $clientName);
-        $this->createChannel($container, $clientName, \boolval($clientConfiguration['preload']));
+        static::createConnectableClient($container, $clientName, $clientConfiguration);
+        static::createClient($container, $clientName);
+        static::createChannel($container, $clientName, \boolval($clientConfiguration['preload']));
     }
 
     /**
@@ -67,7 +67,7 @@ class AMQPCompilerPass implements CompilerPassInterface
      * @param string           $clientName
      * @param array            $clientConfiguration
      */
-    private function createConnectableClient(
+    public static function createConnectableClient(
         ContainerBuilder $container,
         string $clientName,
         array $clientConfiguration
@@ -93,7 +93,7 @@ class AMQPCompilerPass implements CompilerPassInterface
      * @param ContainerBuilder $container
      * @param string           $clientName
      */
-    private function createClient(
+    public static function createClient(
         ContainerBuilder $container,
         string $clientName
     ) {
@@ -125,7 +125,7 @@ class AMQPCompilerPass implements CompilerPassInterface
      * @param string           $clientName
      * @param bool             $preload
      */
-    private function createChannel(
+    public static function createChannel(
         ContainerBuilder $container,
         string $clientName,
         bool $preload
