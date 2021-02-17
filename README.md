@@ -10,7 +10,7 @@ Some first steps for you!
 
 - [Go to DOCS](https://driftphp.io/#/?id=amqp-adapter)
 
-or
+or 
 
 - [Try a demo](https://github.com/driftphp/demo)
 - [Install the skeleton](https://github.com/driftphp/skeleton)
