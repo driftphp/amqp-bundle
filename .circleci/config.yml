@@ -1,39 +1,33 @@
 version: 2
 jobs:
 
-  test-php74:
+  test:
+    parameters:
+      php-version:
+        type: string
     docker:
-      - image: circleci/php:7.4-cli
-      - image: rabbitmq
+      - image: cimg/php:<< parameters.php-version >>
+      - image: rabbitmq:3
+        environment:
+          RABBITMQ_VHOST: /
+          RABBITMQ_USERNAME: guest
+          RABBITMQ_PASSWORD: guest
 
     working_directory: ~/project
+
     steps:
       - checkout
-
       - run:
           name: Run tests
           command: |
-            composer update -n --prefer-dist --no-suggest
-            php vendor/bin/phpunit
-
-  test-php80:
-    docker:
-      - image: circleci/php8.0-cli
-      - image: rabbitmq
-
-    working_directory: ~/project
-    steps:
-      - checkout
-
-      - run:
-          name: Run tests
-          command: |
-            composer update -n --prefer-dist --no-suggest
+            composer update -n --prefer-dist
             php vendor/bin/phpunit
 
 workflows:
   version: 2
   test:
     jobs:
-      - test-php74
-      - test-php80
+      - test:
+          matrix:
+            parameters:
+              php-version: ["7.4", "8.0"]
