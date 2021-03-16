@@ -1,0 +1,17 @@
+language: php
+
+services:
+  - rabbitmq
+
+dist: xenial
+addons:
+  apt:
+    packages:
+      - rabbitmq-server
+
+php:
+  - '7.4'
+  - '8.0'
+
+install: composer update -n --prefer-dist --no-suggest
+script: php vendor/bin/phpunit
